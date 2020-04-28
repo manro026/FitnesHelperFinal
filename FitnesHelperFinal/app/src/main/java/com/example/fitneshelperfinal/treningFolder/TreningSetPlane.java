@@ -1,0 +1,100 @@
+package com.example.fitneshelperfinal.treningFolder;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+
+import com.example.fitneshelperfinal.MainActivity;
+import com.example.fitneshelperfinal.R;
+import com.example.fitneshelperfinal.bd.DBHelper;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+
+public class TreningSetPlane extends Activity {
+
+    MainActivity main;//нужно чтобы обращаться к данным из Shared
+    DBHelper dbHelper;//База данных подключаем крч
+
+    private TextView testText;
+    private Button testBut;
+
+    private int mYear, mMonth, mDay;
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.trening_set_plane);
+
+        dbHelper=new DBHelper(this);//оперделим бд
+        main = new MainActivity();//определили его
+
+        testBut=findViewById(R.id.button2);
+        testText=findViewById(R.id.textView);
+
+    }
+
+public void testBut_Click(View v)
+{
+    AlertDialog.Builder builder= new AlertDialog.Builder(TreningSetPlane.this);//создаем и обьявляем билдер
+    final View view = getLayoutInflater().inflate(R.layout.test, null);//нужен для того чтобы искать элементы на диалоговом окне. ТК через билдер не получается
+    builder.setView(view);//загружаем слой который будет отображаться
+    final AlertDialog dlg = builder.create();//нужно для уничтожение обьекта
+    dlg.show();//показ
+
+
+    CalendarView calendarView = (CalendarView) view.findViewById(R.id.calendarView);//слушатель для календаря
+    calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+
+        @Override
+        public void onSelectedDayChange(CalendarView view, int year,
+                                        int month, int dayOfMonth) {
+            mYear = year;
+            mMonth = month;
+            mDay = dayOfMonth;
+            String selectedDate = new StringBuilder().append(mMonth + 1)
+                    .append("-").append(mDay).append("-").append(mYear)
+                    .append(" ").toString();
+            Toast.makeText(getApplicationContext(), selectedDate, Toast.LENGTH_LONG).show();//таск это всплывающие окно, выводим в него наш выбор, заданным форматом
+        }
+    });
+
+    Button btSet = (Button) view.findViewById(R.id.btSet);
+    btSet.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            main.info_ed.putInt("test",mDay);
+            main.info_ed.commit();
+
+            SQLiteDatabase database = dbHelper.getWritableDatabase();//нужен для управления
+            ContentValues contentValues = new ContentValues();//нужен для добавления новых строк в таблицу выглядит как массив с именами столбцов и тд
+
+            contentValues.put(DBHelper.KEY_DATA, Integer.toString(mDay));
+            database.insert(DBHelper.TABLE_TRENING, null, contentValues);//записываем в какую таблицу.
+
+            dbHelper.close();//отключаемся от бд
+            dlg.dismiss();//дестрой окна
+
+        }
+
+
+
+
+
+
+
+    });
+
+}
+
+
+}
