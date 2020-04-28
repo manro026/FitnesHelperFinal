@@ -84,14 +84,8 @@ public void testBut_Click(View v)
             dbHelper.close();//отключаемся от бд
             dlg.dismiss();//дестрой окна
 
+
         }
-
-
-
-
-
-
-
     });
 
 }
