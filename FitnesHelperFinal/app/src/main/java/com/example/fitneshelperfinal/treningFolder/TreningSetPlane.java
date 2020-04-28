@@ -29,12 +29,12 @@ public class TreningSetPlane extends Activity {
     MainActivity main;//нужно чтобы обращаться к данным из Shared
     DBHelper dbHelper;//База данных подключаем крч
 
-    private TextView testText;
+    private TextView testText, clockText;
     private Button testBut;
 
     private int mYear, mMonth, mDay;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");//модификатор чтобы по нему делать нужную форму даты
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy, HH:MM");//модификатор чтобы по нему делать нужную форму даты
     Date d = new Date();//актуальная дата и время
 
     @Override
@@ -47,6 +47,7 @@ public class TreningSetPlane extends Activity {
 
         testBut=findViewById(R.id.button2);
         testText=findViewById(R.id.textView);
+        clockText=findViewById(R.id.textTime);
 
 
     }
@@ -106,7 +107,11 @@ public void testBut_Click(View v)
 
 public void TimeButton_Click(View v)
 {
-
+    AlertDialog.Builder builder= new AlertDialog.Builder(TreningSetPlane.this);//создаем и обьявляем билдер
+    final View view = getLayoutInflater().inflate(R.layout.clock, null);//нужен для того чтобы искать элементы на диалоговом окне. ТК через билдер не получается
+    builder.setView(view);//загружаем слой который будет отображаться
+    final AlertDialog dlg = builder.create();//нужно для уничтожение обьекта
+    dlg.show();//показ
 }
 
 
