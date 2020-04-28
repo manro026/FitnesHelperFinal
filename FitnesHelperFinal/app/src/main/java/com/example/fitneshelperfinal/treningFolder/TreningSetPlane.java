@@ -51,6 +51,11 @@ public class TreningSetPlane extends Activity {
 
     }
 
+
+
+
+
+
 public void testBut_Click(View v)
 {
     AlertDialog.Builder builder= new AlertDialog.Builder(TreningSetPlane.this);//создаем и обьявляем билдер
@@ -96,7 +101,14 @@ public void testBut_Click(View v)
         }
     });
 
+
 }
+
+public void TimeButton_Click(View v)
+{
+
+}
+
 
 
 }

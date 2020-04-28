@@ -10,19 +10,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
    public  static final String TABLE_TRENING="TreningBD";// дата
 
-
-
-
-
-
     public  static final String KEY_ID="_id";//ид
-   public  static final String KEY_DATA="name";//дата
-   public  static final String KEY_TIME="name";//Запланированное время тренировки
-
-
-
-
-
+    public  static final String KEY_DATA="data";//дата
+    public  static final String KEY_TIME="time";//Запланированное время тренировки
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -30,7 +20,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table "+ TABLE_TRENING+"("+KEY_ID+" integer primary key,"+KEY_DATA+" data)");//Если таблицы не существует то мы ее создаем
+        db.execSQL("create table "+ TABLE_TRENING+"("+KEY_ID+" integer primary key,"+KEY_DATA+" data"+KEY_TIME+"time)");//Если таблицы не существует то мы ее создаем
     }
 
     @Override
