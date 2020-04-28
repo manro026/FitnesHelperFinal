@@ -16,7 +16,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public  static final String KEY_ID="_id";//ид
-   public  static final String KEY_DATA="name";//название (гречка, молоко, мясо)
+   public  static final String KEY_DATA="name";//дата
+   public  static final String KEY_TIME="name";//Запланированное время тренировки
+
+
+
 
 
 
@@ -26,7 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table "+ TABLE_TRENING+"("+KEY_ID+" integer primary key,"+KEY_DATA+" text)");//Если таблицы не существует то мы ее создаем
+        db.execSQL("create table "+ TABLE_TRENING+"("+KEY_ID+" integer primary key,"+KEY_DATA+" data)");//Если таблицы не существует то мы ее создаем
     }
 
     @Override

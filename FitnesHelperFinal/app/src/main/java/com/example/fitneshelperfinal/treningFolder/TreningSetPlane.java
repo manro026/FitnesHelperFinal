@@ -19,6 +19,9 @@ import com.example.fitneshelperfinal.MainActivity;
 import com.example.fitneshelperfinal.R;
 import com.example.fitneshelperfinal.bd.DBHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class TreningSetPlane extends Activity {
@@ -30,6 +33,10 @@ public class TreningSetPlane extends Activity {
     private Button testBut;
 
     private int mYear, mMonth, mDay;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");//модификатор чтобы по нему делать нужную форму даты
+    Date d = new Date();//актуальная дата и время
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +47,7 @@ public class TreningSetPlane extends Activity {
 
         testBut=findViewById(R.id.button2);
         testText=findViewById(R.id.textView);
+
 
     }
 
@@ -61,10 +69,6 @@ public void testBut_Click(View v)
             mYear = year;
             mMonth = month;
             mDay = dayOfMonth;
-            String selectedDate = new StringBuilder().append(mMonth + 1)
-                    .append("-").append(mDay).append("-").append(mYear)
-                    .append(" ").toString();
-            Toast.makeText(getApplicationContext(), selectedDate, Toast.LENGTH_LONG).show();//таск это всплывающие окно, выводим в него наш выбор, заданным форматом
         }
     });
 
@@ -78,13 +82,17 @@ public void testBut_Click(View v)
             SQLiteDatabase database = dbHelper.getWritableDatabase();//нужен для управления
             ContentValues contentValues = new ContentValues();//нужен для добавления новых строк в таблицу выглядит как массив с именами столбцов и тд
 
-            contentValues.put(DBHelper.KEY_DATA, Integer.toString(mDay));
+            String selectedDate = new StringBuilder().append(mMonth + 1)
+                    .append("-").append(mDay).append("-").append(mYear)
+                    .append(" ").toString();//создаем стринг со всеми значениями даты
+            selectedDate = sdf.format(d); //преобразуем его под нужные нам значения даты
+
+            contentValues.put(DBHelper.KEY_DATA, selectedDate);
             database.insert(DBHelper.TABLE_TRENING, null, contentValues);//записываем в какую таблицу.
+            Toast.makeText(getApplicationContext(), selectedDate+"Данные записаны", Toast.LENGTH_LONG).show();//таск это всплывающие окно, выводим в него наш выбор, заданным форматом
 
             dbHelper.close();//отключаемся от бд
             dlg.dismiss();//дестрой окна
-
-
         }
     });
 
