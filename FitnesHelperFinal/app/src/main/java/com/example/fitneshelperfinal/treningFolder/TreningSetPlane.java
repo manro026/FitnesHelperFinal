@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -87,9 +89,9 @@ public void testBut_Click(View v)
             String selectedDate = new StringBuilder().append(mMonth + 1)
                     .append("-").append(mDay).append("-").append(mYear)
                     .append(" ").toString();//создаем стринг со всеми значениями даты
-            selectedDate = sdf.format(d); //преобразуем его под нужные нам значения даты
+            //selectedDate = sdf.format(d); //преобразуем его под нужные нам значения даты
 
-            contentValues.put(DBHelper.KEY_DATA, selectedDate);
+            contentValues.put(DBHelper.KEY_DATATIME, selectedDate);
             database.insert(DBHelper.TABLE_TRENING, null, contentValues);//записываем в какую таблицу.
             Toast.makeText(getApplicationContext(), selectedDate+"Данные записаны", Toast.LENGTH_LONG).show();//таск это всплывающие окно, выводим в него наш выбор, заданным форматом
 
@@ -139,7 +141,7 @@ public void TimeButton_Click(View v)
                 e.printStackTrace();
             }
 
-            contentValues.put(DBHelper.KEY_DATA, selectedDate);
+            contentValues.put(DBHelper.KEY_DATATIME, selectedDate);
             database.insert(DBHelper.TABLE_TRENING, null, contentValues);//записываем в какую таблицу.
             Toast.makeText(getApplicationContext(), selectedDate+"Данные записаны", Toast.LENGTH_LONG).show();//таск это всплывающие окно, выводим в него наш выбор, заданным форматом
 
@@ -149,7 +151,23 @@ public void TimeButton_Click(View v)
         }
     });
 }
-
+public void checkBD(View v)//тут проходит проверка бд выводи в логи крч
+{
+    SQLiteDatabase database = dbHelper.getWritableDatabase();//нужен для управления
+    Cursor cursor = database.query(DBHelper.TABLE_TRENING, null, null, null,
+            null, null, null);// ТУТ ПРОИСХОДИТ СОРТИРОВКА В ДАЛЬНЕЙШЕМ ПРИГОДИТСЯ ЗАПОМНИ
+    if (cursor.moveToFirst()) {
+        int idindex = cursor.getColumnIndex(DBHelper.KEY_ID);
+        int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATATIME);
+        do {
+            Log.d("mLOg ", "ID=" + cursor.getInt(idindex) +
+                    "Дата и время= " + cursor.getString(dataTime));
+        } while (cursor.moveToNext());
+    }
+}
 
 
 }
+
+
+
