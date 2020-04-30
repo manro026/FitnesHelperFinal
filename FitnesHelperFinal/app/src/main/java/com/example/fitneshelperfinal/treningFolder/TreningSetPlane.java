@@ -7,12 +7,18 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -25,7 +31,9 @@ import com.example.fitneshelperfinal.bd.DBHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
@@ -35,9 +43,14 @@ public class TreningSetPlane extends Activity {
     DBHelper dbHelper;//База данных подключаем крч
 
     private TextView testText, clockText;
-    private Button testBut;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
+
+    private String selectedDate;
+
+
+
+    private List<View> allEds;//лист для слоев который мы создаем в лайнере
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");//модификатор чтобы по нему делать нужную форму даты
     Date d = new Date();//актуальная дата и время
@@ -50,11 +63,17 @@ public class TreningSetPlane extends Activity {
         dbHelper=new DBHelper(this);//оперделим бд
         main = new MainActivity();//определили его
 
-        testBut=findViewById(R.id.button2);
-        testText=findViewById(R.id.textView);
-
+        allEds = new ArrayList<View>();
     }
 
+
+public void addTableExercise_Click(View v)
+{
+    final LinearLayout lianer = (LinearLayout) findViewById(R.id.lianer); // обьявили лайнер который находиться у нас в скроле
+    final View test = getLayoutInflater().inflate(R.layout.test, null);//выбираем слой какой мы будем туда пихать
+    lianer.addView(test);
+    allEds.add(test);
+}
 
 public void DataTimeButton_Click(View v)//суда необходимо добавить проверку на то что если пользователь не выбрал ни дату ни время!
 {
@@ -62,6 +81,7 @@ public void DataTimeButton_Click(View v)//суда необходимо доба
     final View view = getLayoutInflater().inflate(R.layout.clock, null);//нужен для того чтобы искать элементы на диалоговом окне. ТК через билдер не получается
     builder.setView(view);//загружаем слой который будет отображаться
     final AlertDialog dlg = builder.create();//нужно для уничтожение обьекта
+
 
     dlg.show();//показ
 
@@ -90,7 +110,7 @@ public void DataTimeButton_Click(View v)//суда необходимо доба
             SQLiteDatabase database = dbHelper.getWritableDatabase();//нужен для управления
             ContentValues contentValues = new ContentValues();//нужен для добавления новых строк в таблицу выглядит как массив с именами столбцов и тд
 
-            String selectedDate = new StringBuilder().append(mDay)
+             selectedDate = new StringBuilder().append(mDay)
                     .append("/").append(mMonth+1).append("/").append(mYear)
                     .append(" ").append(mHour).append(":").append(mMinute).toString();//создаем стринг со всеми значениями даты
           //  selectedDate = sdf.format(selectedDate); //преобразуем его под нужные нам значения даты
@@ -106,11 +126,13 @@ public void DataTimeButton_Click(View v)//суда необходимо доба
 
             dbHelper.close();//отключаемся от бд
             dlg.dismiss();//дестрой окна
-
+            Button bt=findViewById(R.id.buttonDateTime);
+            bt.setText(selectedDate);
         }
     });
 }
-public void checkBD(View v)//тут проходит проверка бд выводи в логи крч
+
+public void checkBD_Click(View v)//тут проходит проверка бд выводи в логи крч
 {
     SQLiteDatabase database = dbHelper.getWritableDatabase();//нужен для управления
     Cursor cursor = database.query(DBHelper.TABLE_TRENING, null, null, null,
