@@ -44,7 +44,7 @@ public class TreningSetPlane extends Activity {
 
     private TextView testText, clockText;
 
-    private int mYear, mMonth, mDay, mHour, mMinute;
+    private int mYear, mMonth, mDay, mHour, mMinute, mSet=1;
 
     private String selectedDate;
 
@@ -68,9 +68,10 @@ public class TreningSetPlane extends Activity {
 public void addTableExercise_Click(View v)
 {
     final LinearLayout lianer = (LinearLayout) findViewById(R.id.lianer); // обьявили лайнер который находиться у нас в скроле
-    final View test = getLayoutInflater().inflate(R.layout.test, null);//выбираем слой какой мы будем туда пихать
-    lianer.addView(test);
-    allEds.add(test);
+    final View viewExercise = getLayoutInflater().inflate(R.layout.exercise, null);//выбираем слой какой мы будем туда пихать
+    TextView text = viewExercise.findViewById(R.id.countExercise); text.setText(Integer.toString(mSet).toString());mSet++;
+    lianer.addView(viewExercise);
+    allEds.add(viewExercise);
 }
 
 public void DataTimeButton_Click(View v)//суда необходимо добавить проверку на то что если пользователь не выбрал ни дату ни время!
@@ -129,16 +130,27 @@ public void checkBD_Click(View v)//тут проходит проверка бд
         int idindex = cursor.getColumnIndex(DBHelper.KEY_ID);
         int nameTrening = cursor.getColumnIndex(DBHelper.KEY_NAMETRENING);
         int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATATIME);
+        int exercise = cursor.getColumnIndex(DBHelper.KEY_EXERCISE);
         do {
             Log.d("mLOg ", "ID=" + cursor.getInt(idindex) +
-                    "Имя= " + cursor.getString(nameTrening)+
-                    "Дата и время= " + cursor.getString(dataTime));
+                    " Имя= " + cursor.getString(nameTrening)+
+                    " Дата и время= " + cursor.getString(dataTime)+
+                    " Упражнения = " + cursor.getString(exercise));
         } while (cursor.moveToNext());
     }
 }
 
 public void ButtonSavePlane_Click(View v)
 {
+    StringBuilder builder = new StringBuilder();
+
+    for (int i = 0; i < allEds.size(); i++) {//сохраняем все позициии
+        EditText nameEsercise = (EditText) allEds.get(i).findViewById(R.id.exercise);//название упражнени
+        EditText countRepeat = (EditText) allEds.get(i).findViewById(R.id.exerciseCount);//Кол-во подходов
+      builder.append(nameEsercise.getText().toString()).append(" ")
+                                        .append(countRepeat.getText().toString()).append(" || ");
+
+    }
     EditText NameTrening = findViewById(R.id.NameTreningEditText);
 
     SQLiteDatabase database = dbHelper.getWritableDatabase();//нужен для управления
@@ -146,6 +158,7 @@ public void ButtonSavePlane_Click(View v)
 
     contentValues.put(DBHelper.KEY_NAMETRENING, NameTrening.getText().toString());
     contentValues.put(DBHelper.KEY_DATATIME, selectedDate);
+    contentValues.put(DBHelper.KEY_EXERCISE, builder.toString());
 
     database.insert(DBHelper.TABLE_TRENING, null, contentValues);//записываем в какую таблицу.
     Toast.makeText(getApplicationContext(), "Данные записаны", Toast.LENGTH_LONG).show();//таск это всплывающие окно, выводим в него наш выбор, заданным форматом
@@ -153,7 +166,6 @@ public void ButtonSavePlane_Click(View v)
     dbHelper.close();//отключаемся от бд
     Intent intent = new Intent(v.getContext(), TreningClass.class);
     startActivity(intent);
-
 }
 
 }

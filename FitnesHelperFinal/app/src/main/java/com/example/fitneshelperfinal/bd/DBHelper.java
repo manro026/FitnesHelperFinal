@@ -6,13 +6,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
    public  static final int DATABASE_VERSION=1;
-   public  static final String DATABASE_NAME="app_bd";
+   public  static final String DATABASE_NAME="app123";
 
    public  static final String TABLE_TRENING="TreningBD";// дата
 
     public  static final String KEY_ID="_id";//ид
     public  static final String KEY_DATATIME="DataTime";//дата
-    public  static final String KEY_NAMETRENING="NameTrening";//дата
+    public  static final String KEY_NAMETRENING="NameTrening";//Название тренировки
+    public  static final String KEY_EXERCISE="NameExercise";//Временно ( нет ) упражнения какие в этот день
 
 
     public DBHelper(Context context) {
@@ -21,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table "+ TABLE_TRENING+"("+KEY_ID+" integer primary key,"+KEY_NAMETRENING+" text,"+KEY_DATATIME+" text)");//Если таблицы не существует то мы ее создаем
+        db.execSQL("create table "+ TABLE_TRENING+"("+KEY_ID+" integer primary key,"+KEY_NAMETRENING+" text,"+KEY_DATATIME+" text,"+KEY_EXERCISE+" text)");//Если таблицы не существует то мы ее создаем
     }
 
     @Override
