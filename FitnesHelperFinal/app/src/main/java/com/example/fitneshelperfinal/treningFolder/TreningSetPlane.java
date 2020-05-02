@@ -124,43 +124,61 @@ public void DataTimeButton_Click(View v)//суда необходимо доба
 public void checkBD_Click(View v)//тут проходит проверка бд выводи в логи крч
 {
     SQLiteDatabase database = dbHelper.getWritableDatabase();//нужен для управления
+
     Cursor cursor = database.query(DBHelper.TABLE_TRENING, null, null, null,
             null, null, null);// ТУТ ПРОИСХОДИТ СОРТИРОВКА В ДАЛЬНЕЙШЕМ ПРИГОДИТСЯ ЗАПОМНИ
     if (cursor.moveToFirst()) {
         int idindex = cursor.getColumnIndex(DBHelper.KEY_ID);
         int nameTrening = cursor.getColumnIndex(DBHelper.KEY_NAMETRENING);
         int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATATIME);
-        int exercise = cursor.getColumnIndex(DBHelper.KEY_EXERCISE);
+
         do {
             Log.d("mLOg ", "ID=" + cursor.getInt(idindex) +
                     " Имя= " + cursor.getString(nameTrening)+
-                    " Дата и время= " + cursor.getString(dataTime)+
-                    " Упражнения = " + cursor.getString(exercise));
+                    " Дата и время= " + cursor.getString(dataTime));
         } while (cursor.moveToNext());
+    }
+
+    Cursor cursorTWO = database.query(DBHelper.TABLE_EXERCISE, null, null, null,
+            null, null, null);// ТУТ ПРОИСХОДИТ СОРТИРОВКА В ДАЛЬНЕЙШЕМ ПРИГОДИТСЯ ЗАПОМНИ
+    if (cursorTWO.moveToFirst()) {
+        int idindex = cursorTWO.getColumnIndex(DBHelper.KEY_ID);
+        int nameTrening = cursorTWO.getColumnIndex(DBHelper.KEY_NAMETRENING);
+        int dataTime = cursorTWO.getColumnIndex(DBHelper.KEY_DATATIME);
+        int exercise = cursorTWO.getColumnIndex(DBHelper.KEY_EXERCISE);
+        int exerciseCount = cursorTWO.getColumnIndex(DBHelper.KEY_EXERCISEСOUNT);
+
+        do {
+            Log.d("mLOg ", "ID=" + cursorTWO.getInt(idindex) +
+                    " Имя= " + cursorTWO.getString(nameTrening)+
+                    " дата= " + cursorTWO.getString(dataTime)+
+                    " упражнения= " + cursorTWO.getString(exercise)+
+                    " подходы= " + cursorTWO.getString(exerciseCount));
+        } while (cursorTWO.moveToNext());
     }
 }
 
 public void ButtonSavePlane_Click(View v)
 {
-    StringBuilder builder = new StringBuilder();
-
-    for (int i = 0; i < allEds.size(); i++) {//сохраняем все позициии
-        EditText nameEsercise = (EditText) allEds.get(i).findViewById(R.id.exercise);//название упражнени
-        EditText countRepeat = (EditText) allEds.get(i).findViewById(R.id.exerciseCount);//Кол-во подходов
-      builder.append(nameEsercise.getText().toString()).append(" ")
-                                        .append(countRepeat.getText().toString()).append(" || ");
-
-    }
-    EditText NameTrening = findViewById(R.id.NameTreningEditText);
-
     SQLiteDatabase database = dbHelper.getWritableDatabase();//нужен для управления
     ContentValues contentValues = new ContentValues();//нужен для добавления новых строк в таблицу выглядит как массив с именами столбцов и тд
 
-    contentValues.put(DBHelper.KEY_NAMETRENING, NameTrening.getText().toString());
+    contentValues.put(DBHelper.KEY_NAMETRENING, ((EditText) findViewById(R.id.NameTreningEditText)).getText().toString());
     contentValues.put(DBHelper.KEY_DATATIME, selectedDate);
-    contentValues.put(DBHelper.KEY_EXERCISE, builder.toString());
 
     database.insert(DBHelper.TABLE_TRENING, null, contentValues);//записываем в какую таблицу.
+    contentValues.clear();
+
+    for (int i = 0; i < allEds.size(); i++) {//сохраняем все позициии
+        contentValues.put(DBHelper.KEY_NAMETRENING, ((EditText) findViewById(R.id.NameTreningEditText)).getText().toString());
+        contentValues.put(DBHelper.KEY_DATATIME, selectedDate);
+        contentValues.put(DBHelper.KEY_EXERCISE, ((EditText) allEds.get(i).findViewById(R.id.exercise)).getText().toString());
+        contentValues.put(DBHelper.KEY_EXERCISEСOUNT, ((EditText) allEds.get(i).findViewById(R.id.exerciseCount)).getText().toString());
+
+        database.insert(DBHelper.TABLE_EXERCISE, null, contentValues);//записываем в какую таблицу.
+        contentValues.clear();
+    }
+
     Toast.makeText(getApplicationContext(), "Данные записаны", Toast.LENGTH_LONG).show();//таск это всплывающие окно, выводим в него наш выбор, заданным форматом
 
     dbHelper.close();//отключаемся от бд
