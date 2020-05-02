@@ -60,7 +60,6 @@ public class TreningSetPlane extends Activity {
 
         dbHelper=new DBHelper(this);//оперделим бд
         main = new MainActivity();//определили его
-
         allEds = new ArrayList<View>();
     }
 

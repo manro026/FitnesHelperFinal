@@ -12,7 +12,6 @@ package com.example.fitneshelperfinal.treningFolder;
         import com.example.fitneshelperfinal.R;
 
 public class TreningClass extends Activity {
- private Button StartTrening, PlaneTrening;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,9 +20,8 @@ public class TreningClass extends Activity {
     }
 
     public void StartTrening_Click(View v){
-
-
-
+        Intent intent = new Intent(v.getContext(), TreningStartPlane.class);
+        startActivity(intent);
     }
     public void PlaneTrening_Click(View v){
         Intent intent = new Intent(v.getContext(), TreningSetPlane.class);
