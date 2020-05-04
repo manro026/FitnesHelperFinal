@@ -4,14 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import androidx.annotation.Nullable;
-
 import com.example.fitneshelperfinal.MainActivity;
 import com.example.fitneshelperfinal.R;
 import com.example.fitneshelperfinal.bd.DBHelper;
 
+import java.util.ArrayList;
+
 public class TreningStartPlane extends Activity {
+
     MainActivity main;//нужно чтобы обращаться к данным из Shared
     DBHelper dbHelper;//База данных подключаем крч
 
@@ -23,10 +24,11 @@ public class TreningStartPlane extends Activity {
 
         dbHelper=new DBHelper(this);//оперделим бд
         main = new MainActivity();//определили его
-        for(int i=0;i<5;i++)
+     /*   for(int i=0;i<5;i++)
         {
             start();
-        }
+        }*/
+
     }
 
     private void start()
