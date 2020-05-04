@@ -1,4 +1,4 @@
-package com.example.fitneshelperfinal;
+package com.example.fitneshelperfinal.customScrol;
 
 import android.os.Parcelable;
 import android.view.View;

@@ -4,16 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.fitneshelperfinal.MainActivity;
 import com.example.fitneshelperfinal.R;
-import com.example.fitneshelperfinal.SliderPageAdapter;
+import com.example.fitneshelperfinal.customScrol.SliderPageAdapter;
 import com.example.fitneshelperfinal.bd.DBHelper;
+import com.example.fitneshelperfinal.customScrol.zoomAnimation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +45,7 @@ public class TreningStartPlane extends Activity {
 
             SliderPageAdapter pagerAdapter = new SliderPageAdapter(pages);
             ViewPager viewPager = new ViewPager(this);
+            viewPager.setPageTransformer(true,new zoomAnimation());
             viewPager.setAdapter(pagerAdapter);
             viewPager.setCurrentItem(1);
 
