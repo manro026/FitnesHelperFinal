@@ -108,14 +108,14 @@ public void DataTimeButton_Click(View v)//суда необходимо доба
              selectedDate = new StringBuilder().append(mDay)
                     .append("/").append(mMonth+1).append("/").append(mYear).toString();//создаем стринг со всеми значениями даты
              selectedTime = new StringBuilder().append(mHour).append(":").append(mMinute).toString();
+            Date date;
 
+//            selectedDate = sdf.format(selectedDate); //преобразуем его под нужные нам значения даты
+            try {
+                date = sdf.parse(selectedDate);
+                System.out.println(date);
+            } catch (ParseException e){}
 
-          /*  selectedDate = sdf.format(selectedDate); //преобразуем его под нужные нам значения даты
-           try {
-                d = sdf.parse(selectedDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }*/
             dlg.dismiss();//дестрой окна
             Button bt=findViewById(R.id.buttonDateTime);
             bt.setText(selectedDate);
