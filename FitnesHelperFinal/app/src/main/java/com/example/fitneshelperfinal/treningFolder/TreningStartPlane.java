@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -66,7 +67,7 @@ private void checkBD(){
     if (cursor.moveToFirst()) {
         int idindex = cursor.getColumnIndex(DBHelper.KEY_ID);
         int nameTrening = cursor.getColumnIndex(DBHelper.KEY_NAMETRENING);
-        int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATATIME);
+        int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATA);
 
 
         do {
@@ -75,6 +76,8 @@ private void checkBD(){
                 Log.d("mLOg ", "ID=" + cursor.getInt(idindex) +
                         " Имя= " + cursor.getString(nameTrening)+
                         " Дата и время= " + cursor.getString(dataTime));
+                Toast.makeText(getApplicationContext(), "Данные найдены", Toast.LENGTH_LONG).show();//таск это всплывающие окно, выводим в него наш выбор, заданным форматом
+
                 break;
             }
 

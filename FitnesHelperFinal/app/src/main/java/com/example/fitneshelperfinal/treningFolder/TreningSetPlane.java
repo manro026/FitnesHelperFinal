@@ -47,6 +47,7 @@ public class TreningSetPlane extends Activity {
     private int mYear, mMonth, mDay, mHour, mMinute, mSet=1;
 
     private String selectedDate;
+    private String selectedTime;
 
     private List<View> allEds;//лист для слоев который мы создаем в лайнере
 
@@ -105,8 +106,10 @@ public void DataTimeButton_Click(View v)//суда необходимо доба
         @Override
         public void onClick(View v) {
              selectedDate = new StringBuilder().append(mDay)
-                    .append("/").append(mMonth+1).append("/").append(mYear)
-                    .append(" ").append(mHour).append(":").append(mMinute).toString();//создаем стринг со всеми значениями даты
+                    .append("/").append(mMonth+1).append("/").append(mYear).toString();//создаем стринг со всеми значениями даты
+             selectedTime = new StringBuilder().append(mHour).append(":").append(mMinute).toString();
+
+
           /*  selectedDate = sdf.format(selectedDate); //преобразуем его под нужные нам значения даты
            try {
                 d = sdf.parse(selectedDate);
@@ -129,12 +132,14 @@ public void checkBD_Click(View v)//тут проходит проверка бд
     if (cursor.moveToFirst()) {
         int idindex = cursor.getColumnIndex(DBHelper.KEY_ID);
         int nameTrening = cursor.getColumnIndex(DBHelper.KEY_NAMETRENING);
-        int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATATIME);
+        int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATA);
+        int Time = cursor.getColumnIndex(DBHelper.KEY_TIME);
 
         do {
             Log.d("mLOg ", "ID=" + cursor.getInt(idindex) +
                     " Имя= " + cursor.getString(nameTrening)+
-                    " Дата и время= " + cursor.getString(dataTime));
+                    " время= " + cursor.getString(Time)+
+                    " Дата= " + cursor.getString(dataTime));
         } while (cursor.moveToNext());
     }
 
@@ -143,7 +148,7 @@ public void checkBD_Click(View v)//тут проходит проверка бд
     if (cursorTWO.moveToFirst()) {
         int idindex = cursorTWO.getColumnIndex(DBHelper.KEY_ID);
         int nameTrening = cursorTWO.getColumnIndex(DBHelper.KEY_NAMETRENING);
-        int dataTime = cursorTWO.getColumnIndex(DBHelper.KEY_DATATIME);
+        int dataTime = cursorTWO.getColumnIndex(DBHelper.KEY_DATA);
         int exercise = cursorTWO.getColumnIndex(DBHelper.KEY_EXERCISE);
         int exerciseCount = cursorTWO.getColumnIndex(DBHelper.KEY_EXERCISEСOUNT);
 
@@ -163,14 +168,15 @@ public void ButtonSavePlane_Click(View v)
     ContentValues contentValues = new ContentValues();//нужен для добавления новых строк в таблицу выглядит как массив с именами столбцов и тд
 
     contentValues.put(DBHelper.KEY_NAMETRENING, ((EditText) findViewById(R.id.NameTreningEditText)).getText().toString());
-    contentValues.put(DBHelper.KEY_DATATIME, selectedDate);
+    contentValues.put(DBHelper.KEY_DATA, selectedDate);
+    contentValues.put(DBHelper.KEY_TIME, selectedTime);
 
     database.insert(DBHelper.TABLE_TRENING, null, contentValues);//записываем в какую таблицу.
     contentValues.clear();
 
     for (int i = 0; i < allEds.size(); i++) {//сохраняем все позициии
         contentValues.put(DBHelper.KEY_NAMETRENING, ((EditText) findViewById(R.id.NameTreningEditText)).getText().toString());
-        contentValues.put(DBHelper.KEY_DATATIME, selectedDate);
+        contentValues.put(DBHelper.KEY_DATA, selectedDate);
         contentValues.put(DBHelper.KEY_EXERCISE, ((EditText) allEds.get(i).findViewById(R.id.exercise)).getText().toString());
         contentValues.put(DBHelper.KEY_EXERCISEСOUNT, ((EditText) allEds.get(i).findViewById(R.id.exerciseCount)).getText().toString());
 
