@@ -71,19 +71,11 @@ public class TreningStartPlane extends Activity {
         Cursor cursor = database.query(DBHelper.TABLE_TRENING, null, null, null,
                 null, null, null);// ТУТ ПРОИСХОДИТ СОРТИРОВКА В ДАЛЬНЕЙШЕМ ПРИГОДИТСЯ ЗАПОМНИ
 
-
         if (cursor.moveToFirst()) {
             int idindex = cursor.getColumnIndex(DBHelper.KEY_ID);
             int nameTrening = cursor.getColumnIndex(DBHelper.KEY_NAMETRENING);
             int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATA);
             String test2 = cursor.getString(dataTime);
-
-            String dtStart = cursor.getString(dataTime);
-            try {
-                Date date = sdf.parse(dtStart);
-                System.out.println(date);
-            } catch (ParseException e) { // TODO Auto-generated catch block e.printStackTrace(); }
-
 
                 do {
                     if (test.equals(test2)) {
@@ -97,9 +89,7 @@ public class TreningStartPlane extends Activity {
 
                 } while (cursor.moveToNext());
             }
-
-
         }
     }
-}
+
 

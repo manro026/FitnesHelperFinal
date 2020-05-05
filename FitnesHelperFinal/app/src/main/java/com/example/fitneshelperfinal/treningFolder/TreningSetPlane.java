@@ -7,18 +7,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -29,13 +23,11 @@ import com.example.fitneshelperfinal.MainActivity;
 import com.example.fitneshelperfinal.R;
 import com.example.fitneshelperfinal.bd.DBHelper;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class TreningSetPlane extends Activity {
 
@@ -51,8 +43,7 @@ public class TreningSetPlane extends Activity {
 
     private List<View> allEds;//лист для слоев который мы создаем в лайнере
 
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");//модификатор чтобы по нему делать нужную форму даты
-    Date d = new Date();//актуальная дата и время
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");//модификатор чтобы по нему делать нужную форму даты
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,29 +83,24 @@ public void DataTimeButton_Click(View v)//суда необходимо доба
             mHour=hourOfDay;  mMinute=minute;
         }    });
 
-    CalendarView calendarView = (CalendarView) view.findViewById(R.id.calendarView);//слушатель для календаря
+    final CalendarView calendarView = (CalendarView) view.findViewById(R.id.calendarView);//слушатель для календаря
     calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
         @Override
         public void onSelectedDayChange(CalendarView view, int year,
                                         int month, int dayOfMonth) {
-            mYear = year;  mMonth = month; mDay = dayOfMonth;
-        }    });
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month, dayOfMonth);
+            selectedDate=sdf.format(calendar.getTime());
+        }
+    });
 
     Button button=(Button) view.findViewById(R.id.button9);
     button.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-             selectedDate = new StringBuilder().append(mDay)
-                    .append("/").append(mMonth+1).append("/").append(mYear).toString();//создаем стринг со всеми значениями даты
-             selectedTime = new StringBuilder().append(mHour).append(":").append(mMinute).toString();
-            Date date;
 
-//            selectedDate = sdf.format(selectedDate); //преобразуем его под нужные нам значения даты
-            try {
-                date = sdf.parse(selectedDate);
-                System.out.println(date);
-            } catch (ParseException e){}
+            selectedTime = new StringBuilder().append(mHour).append(":").append(mMinute).toString();
 
             dlg.dismiss();//дестрой окна
             Button bt=findViewById(R.id.buttonDateTime);
@@ -190,6 +176,8 @@ public void ButtonSavePlane_Click(View v)
     Intent intent = new Intent(v.getContext(), TreningClass.class);
     startActivity(intent);
 }
+
+
 
 }
 
