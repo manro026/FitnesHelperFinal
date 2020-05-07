@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -32,18 +33,20 @@ public class TreningStartPlane extends Activity {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");//модификатор чтобы по нему делать нужную форму даты
     Date d = new Date();//актуальная дата и время
 
+    private List<View> allEds;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test);
         dbHelper = new DBHelper(this);
+        allEds = new ArrayList<View>();
         LayoutInflater inflater = LayoutInflater.from(this);
         List<View> pages = new ArrayList<View>();
         checkBD();
 
         View page = inflater.inflate(R.layout.test2, null);
-
+        test(page);
         pages.add(page);
 
         page = inflater.inflate(R.layout.test2, null);
@@ -63,9 +66,29 @@ public class TreningStartPlane extends Activity {
         setContentView(viewPager);
     }
 
-    private  void test()
+    private  void test(View page)
     {
 
+        String test = sdf.format(d);
+        SQLiteDatabase database = dbHelper.getWritableDatabase();//нужен для управления
+
+        Cursor cursor = database.query(DBHelper.TABLE_TRENING, null, null, null,
+                null, null, null);// ТУТ ПРОИСХОДИТ СОРТИРОВКА В ДАЛЬНЕЙШЕМ ПРИГОДИТСЯ ЗАПОМНИ
+        if (cursor.moveToFirst()) {
+            int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATA);
+            do {
+                if (test.equals(cursor.getString(dataTime))) {
+                   for(int i=0;i<cursor.getInt(cursor.getColumnIndex(DBHelper.KEY_COUNTEXERCISE));i++) {
+                       LinearLayout test_lianer = (LinearLayout) page.findViewById(R.id.linearLayout);
+                       final View viewExercise = getLayoutInflater().inflate(R.layout.exercise, null);//выбираем слой какой мы будем туда пихать
+                       test_lianer.addView(viewExercise);
+                       allEds.add(viewExercise);
+                   }
+                    break;
+                }
+
+            } while (cursor.moveToNext());
+        }
     }
 
 
