@@ -120,11 +120,13 @@ public void checkBD_Click(View v)//тут проходит проверка бд
         int nameTrening = cursor.getColumnIndex(DBHelper.KEY_NAMETRENING);
         int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATA);
         int Time = cursor.getColumnIndex(DBHelper.KEY_TIME);
+        int count = cursor.getColumnIndex(DBHelper.KEY_EXERCISEСOUNT);
 
         do {
             Log.d("mLOg ", "ID=" + cursor.getInt(idindex) +
                     " Имя= " + cursor.getString(nameTrening)+
                     " время= " + cursor.getString(Time)+
+                    " кол-во упражнений= " + cursor.getInt(count)+
                     " Дата= " + cursor.getString(dataTime));
         } while (cursor.moveToNext());
     }
@@ -156,6 +158,8 @@ public void ButtonSavePlane_Click(View v)
     contentValues.put(DBHelper.KEY_NAMETRENING, ((EditText) findViewById(R.id.NameTreningEditText)).getText().toString());
     contentValues.put(DBHelper.KEY_DATA, selectedDate);
     contentValues.put(DBHelper.KEY_TIME, selectedTime);
+    contentValues.put(DBHelper.KEY_COUNTEXERCISE, allEds.size());
+
 
     database.insert(DBHelper.TABLE_TRENING, null, contentValues);//записываем в какую таблицу.
     contentValues.clear();

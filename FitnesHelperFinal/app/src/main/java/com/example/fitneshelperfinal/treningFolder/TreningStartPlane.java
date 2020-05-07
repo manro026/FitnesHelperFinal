@@ -63,6 +63,12 @@ public class TreningStartPlane extends Activity {
         setContentView(viewPager);
     }
 
+    private  void test()
+    {
+
+    }
+
+
     private void checkBD() {
 
         String test = sdf.format(d);
@@ -75,10 +81,8 @@ public class TreningStartPlane extends Activity {
             int idindex = cursor.getColumnIndex(DBHelper.KEY_ID);
             int nameTrening = cursor.getColumnIndex(DBHelper.KEY_NAMETRENING);
             int dataTime = cursor.getColumnIndex(DBHelper.KEY_DATA);
-            String test2 = cursor.getString(dataTime);
-
                 do {
-                    if (test.equals(test2)) {
+                    if (test.equals(cursor.getString(dataTime))) {
                         Log.d("mLOg ", "ID=" + cursor.getInt(idindex) +
                                 " Имя= " + cursor.getString(nameTrening) +
                                 " Дата и время= " + cursor.getString(dataTime));
